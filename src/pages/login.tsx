@@ -28,11 +28,12 @@ export default function Login() {
           return;
         }
 
-        setIsLoading(false);
         window.location.href = response.content.redirectUrl;
       } else {
         navigate("/");
       }
+    } else {
+      setIsLoading(false);
     }
   };
 
