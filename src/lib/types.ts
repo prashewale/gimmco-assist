@@ -25,6 +25,11 @@ export type LoginResponse = {
     expiresInMinutes: number;
   };
   user: User;
+  redirectUrl: string | null;
+};
+
+export type CheckAuthRequestResponse = {
+  redirectUrl: string;
 };
 
 export type ApiResponse<T> = {

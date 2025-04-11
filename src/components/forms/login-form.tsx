@@ -76,7 +76,7 @@ export function LoginForm({ authReqId, className, ...props }: LoginFormType) {
       }
       setIsLoading(false);
 
-      window.location.href = "/";
+      window.location.href = content.redirectUrl ?? "/";
     } catch (error) {
       setIsLoading(false);
     }

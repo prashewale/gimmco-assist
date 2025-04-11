@@ -1,5 +1,9 @@
 import { axiosInstance } from "@/lib/axios-instance";
-import { ApiResponse, LoginResponse } from "@/lib/types";
+import {
+  ApiResponse,
+  CheckAuthRequestResponse,
+  LoginResponse,
+} from "@/lib/types";
 
 export async function loginAsync(
   username: string,
@@ -21,14 +25,13 @@ export async function loginAsync(
 export async function checkAuthReqAndRedirect(
   authReqId: string,
   userId: string
-): Promise<ApiResponse<void>> {
-  const response = await axiosInstance.post<ApiResponse<void>>(
-    "/check-auth-request",
-    {
-      authReqId,
-      userId,
-    }
-  );
+): Promise<ApiResponse<CheckAuthRequestResponse>> {
+  const response = await axiosInstance.post<
+    ApiResponse<CheckAuthRequestResponse>
+  >("/check-auth-request", {
+    authReqId,
+    userId,
+  });
 
   return response.data;
 }

@@ -25,8 +25,11 @@ export default function Login() {
           toast("Invalid Auth Request", {
             description: response.errors,
           });
+          return;
         }
+
         setIsLoading(false);
+        window.location.href = response.content.redirectUrl;
       } else {
         navigate("/");
       }
