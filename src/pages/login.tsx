@@ -1,18 +1,40 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { GalleryVerticalEnd } from "lucide-react";
-import useIsAuthenticated from "react-auth-kit/hooks/useIsAuthenticated";
 
 import { LoginForm } from "@/components/forms/login-form";
+import { checkAuthReqAndRedirect } from "@/services/user-service";
+import useAuthUser from "react-auth-kit/hooks/useAuthUser";
+import { User } from "@/lib/types";
+import { toast } from "sonner";
 
 export default function Login() {
   const navigate = useNavigate();
-  const isAuthenticated = useIsAuthenticated();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const authUser = useAuthUser<User>();
+
+  const queryParams = new URLSearchParams(window.location.search);
+  const authReqId = queryParams.get("authReqId");
+
+  const processAndNavigate = async () => {
+    if (authUser) {
+      if (authReqId) {
+        setIsLoading(true);
+        const response = await checkAuthReqAndRedirect(authReqId, authUser._id);
+        if (response.errors) {
+          toast("Invalid Auth Request", {
+            description: response.errors,
+          });
+        }
+        setIsLoading(false);
+      } else {
+        navigate("/");
+      }
+    }
+  };
 
   useEffect(() => {
-    if (isAuthenticated) {
-      navigate("/");
-    }
+    processAndNavigate();
   }, []);
 
   return (
@@ -24,7 +46,7 @@ export default function Login() {
           </div>
           Gimmco Assist
         </a>
-        <LoginForm />
+        <LoginForm authReqId={authReqId} />
       </div>
     </div>
   );

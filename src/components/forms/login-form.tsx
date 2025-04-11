@@ -28,10 +28,11 @@ import { loginAsync } from "@/services/user-service";
 import React from "react";
 import { Loader2 } from "lucide-react";
 
-export function LoginForm({
-  className,
-  ...props
-}: React.ComponentPropsWithoutRef<"div">) {
+type LoginFormType = React.ComponentPropsWithoutRef<"div"> & {
+  authReqId: string | null;
+};
+
+export function LoginForm({ authReqId, className, ...props }: LoginFormType) {
   const [isLoading, setIsLoading] = React.useState(false);
   const signIn = useSignIn();
 
@@ -48,7 +49,8 @@ export function LoginForm({
     try {
       const { content, errors } = await loginAsync(
         values.username,
-        values.password
+        values.password,
+        authReqId
       );
 
       if (errors.length > 0) {
