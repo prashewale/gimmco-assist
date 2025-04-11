@@ -46,14 +46,14 @@ export function LoginForm({
   async function onSubmit(values: z.infer<typeof loginSchema>) {
     setIsLoading(true);
     try {
-      const { content, error } = await loginAsync(
+      const { content, errors } = await loginAsync(
         values.username,
         values.password
       );
 
-      if (error) {
+      if (errors.length > 0) {
         toast("Login failed", {
-          description: error,
+          description: errors,
         });
         return;
       }
